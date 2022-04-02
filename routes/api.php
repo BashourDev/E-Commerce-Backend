@@ -36,5 +36,6 @@ Route::get('/categories/items', [CategoryController::class, 'itemCategories']);
 Route::get('/orders', [OrderController::class, 'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+
     return $request->user();
 });
