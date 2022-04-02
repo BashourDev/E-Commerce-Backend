@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/brands', [BrandController::class, 'index']);
 Route::post('/brands/create', [BrandController::class, 'store']);
