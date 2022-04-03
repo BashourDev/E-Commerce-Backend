@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/tags', [TagController::class, 'index']);
+Route::post('/tags/create', [TagController::class, 'store']);
 Route::get('/brands', [BrandController::class, 'index']);
 Route::post('/brands/create', [BrandController::class, 'store']);
 Route::get('/products', [ProductController::class, 'index']);

@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::query()->where('name', 'like', '%'.$request->get('search').'%')->paginate(4, ['*'], 'page', $request->get('page'));
+        $products = Product::query()->with(['brand', 'categories'])->where('name', 'like', '%'.$request->get('search').'%')->paginate(8, ['*'], 'page', $request->get('page'));
         $updatedProducts = $products->transform(function ($item, $key) {
             foreach ($item->getMedia() as $media) {
                 $media['link'] = $media->getFullUrl();
@@ -39,7 +39,6 @@ class ProductController extends Controller
             'buyPrice' => $request->get('buyPrice'),
             'sellPrice' => $request->get('sellPrice'),
             'discount' => $request->get('discount'),
-            'tags' => $request->get('tags'),
             'brand_id' => json_decode($request->get('brand'))->id
         ]);
 //        return response(json_decode($request->get('specifics')));
@@ -65,7 +64,16 @@ class ProductController extends Controller
                 $fileAdder->toMediaCollection();
             });
 
-        $product->categories()->attach(json_decode($request->get('category'))->id);
+        $tags = array();
+
+        $tagsCount = 0;
+        foreach (json_decode($request->get('tags')) as $tag) {
+            $tags[$tagsCount] = $tag->id;
+        }
+
+        $product->tags()->sync($tags);
+
+        $product->categories()->sync(json_decode($request->get('category'))->id);
 
         return response($product);
     }

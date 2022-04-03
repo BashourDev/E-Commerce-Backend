@@ -11,7 +11,7 @@ class Product extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    protected $fillable = ['name', 'description', 'buyPrice', 'sellPrice', 'discount', 'tags'];
+    protected $fillable = ['name', 'description', 'buyPrice', 'sellPrice', 'discount', 'brand_id'];
 
 
     public function specifics()
@@ -32,5 +32,10 @@ class Product extends Model implements HasMedia
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id', 'id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'products_tags');
     }
 }
