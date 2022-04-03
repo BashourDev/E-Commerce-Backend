@@ -16,13 +16,13 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::query()->where('name', 'like', '%'.$request->get('search').'%')->get();
-        $products = $products->transform(function ($item, $key) {
+        $products = Product::query()->where('name', 'like', '%'.$request->get('search').'%')->paginate(4, ['*'], 'page', $request->get('page'));
+        $updatedProducts = $products->transform(function ($item, $key) {
             foreach ($item->getMedia() as $media) {
                 $media['link'] = $media->getFullUrl();
             }
             return $item; });
-        return response($products);
+        return response($products->setCollection($updatedProducts));
     }
 
     /**
