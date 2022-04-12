@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Specific;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -20,7 +22,7 @@ class OrderController extends Controller
         if ($request->get('search')) {
             $orders->where('id', '=', $request->get('search'));
         }
-        return response($orders->get());
+        return response($orders->orderByDesc('updated_at')->paginate(15, ['*'], 'page', $request->get('page')));
     }
 
     /**
@@ -33,6 +35,7 @@ class OrderController extends Controller
     {
         $order = auth()->user()->orders()->create([
             'totalPrice' => $request->get('totalPrice'),
+            'currency' => $request->get('currency'),
             'discount' => $request->get('discount'),
             'address' => auth()->user()->address,
             'phone' => $request->user()->phone,
@@ -41,10 +44,14 @@ class OrderController extends Controller
 
         foreach ($request->get('soldItems') as $soldItem) {
             $order->soldItems()->create([
-                'sellPrice' => $soldItem->sellPrice,
-                'quantity' => $soldItem->quantity
+                'specific_id' => $soldItem['specific_id'],
+                'sellPrice' => $soldItem['sellPrice'],
+                'quantity' => $soldItem['quantity']
             ]);
+            Specific::query()->find($soldItem['specific_id'])->decrement('quantity', $soldItem['quantity']);
         }
+
+        auth()->user()->cart->specifics()->detach();
 
         return response($order->loadMissing('soldItems'));
     }
@@ -57,7 +64,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return response($order->loadMissing('soldItems'));
+        $this->authorize('view', [$order]);
+
+        return response($order->loadMissing(['user', 'soldItems', 'soldItems.specific']));
     }
 
     /**
@@ -88,6 +97,13 @@ class OrderController extends Controller
         $order->status = $request->get('status');
         $order->save();
         return response($order->loadMissing('soldItems'));
+    }
+
+    public function userOrders()
+    {
+        return \response(auth()->user()->loadMissing(['orders' => function ($query) {
+            $query->orderByDesc('updated_at');
+        }])->loadCount(['soldItems']));
     }
 
 }

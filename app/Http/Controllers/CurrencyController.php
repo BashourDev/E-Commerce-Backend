@@ -14,7 +14,7 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
+        return response(Currency::all());
     }
 
     /**
@@ -25,7 +25,10 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response(Currency::query()->create([
+            'name' => $request->get('name'),
+            'rate' => $request->get('rate')
+        ]));
     }
 
     /**
@@ -48,7 +51,10 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, Currency $currency)
     {
-        //
+        return response($currency->update([
+            'name' => $request->get('name'),
+            'rate' => $request->get('rate')
+        ]));
     }
 
     /**

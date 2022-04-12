@@ -61,4 +61,12 @@ class TagController extends Controller
     {
         //
     }
+
+    public function homeTagsProducts()
+    {
+        $tags = Tag::query()->with(['products' => function ($query) {
+            $query->latest('updated_at')->limit(8)->get();
+        }, 'products.firstMediaOnly', 'products.brand'])->get();
+        return response($tags);
+    }
 }

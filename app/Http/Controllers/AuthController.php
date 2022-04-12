@@ -92,6 +92,8 @@ class AuthController extends Controller
             'isAdmin' => false
         ]);
 
+        $entity->cart()->create([]);
+
         if (Auth::attempt([
             'email'=>$request->get('email'),
             'password'=>$request->get('password')

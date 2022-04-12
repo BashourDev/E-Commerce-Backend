@@ -9,7 +9,9 @@ class Specific extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['color', 'size', 'quantity'];
+    protected $with = ['product', 'product.firstMediaOnly'];
+
+    protected $fillable = ['color', 'colorText', 'size', 'quantity'];
 
     public function product()
     {
@@ -24,6 +26,11 @@ class Specific extends Model
     public function orders()
     {
         return $this->hasManyThrough(Order::class, SoldItem::class);
+    }
+
+    public function carts()
+    {
+        return $this->belongsToMany(Cart::class, 'cart_specific');
     }
 
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->decimal('totalPrice');
             $table->decimal('discount')->nullable();
+            $table->string('currency');
             $table->string('address');
             $table->string('phone');
             $table->integer('status');

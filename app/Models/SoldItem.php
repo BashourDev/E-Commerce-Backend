@@ -9,7 +9,7 @@ class SoldItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sellPrice', 'quantity'];
+    protected $fillable = ['specific_id', 'sellPrice', 'quantity'];
 
     public function specific()
     {

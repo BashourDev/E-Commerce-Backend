@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id');
             $table->string('color');
+            $table->string('colorText');
             $table->string('size');
             $table->integer('quantity');
             $table->timestamps();

@@ -13,7 +13,7 @@ class Order extends Model
     const STATUS_SHIPPING = 1;
     const STATUS_DELIVERED = 2;
 
-    protected $fillable = ['totalPrice', 'discount', 'address', 'phone', 'status'];
+    protected $fillable = ['totalPrice', 'discount', 'currency', 'address', 'phone', 'status'];
 
     public function user()
     {

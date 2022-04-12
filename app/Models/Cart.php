@@ -18,7 +18,7 @@ class Cart extends Model
 
     public function specifics()
     {
-        return $this->belongsToMany(Specific::class)->withPivot(['quantity']);
+        return $this->belongsToMany(Specific::class, 'cart_specific')->withPivot(['id', 'quantity']);
     }
 
 }

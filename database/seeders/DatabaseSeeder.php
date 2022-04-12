@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        User::query()->create([
+        $user = User::query()->create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin'),
@@ -24,5 +24,6 @@ class DatabaseSeeder extends Seeder
             'phone' => 'Syria',
             'isAdmin' => true,
         ]);
+        $user->cart()->create([]);
     }
 }

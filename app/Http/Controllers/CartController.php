@@ -16,7 +16,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        return response(auth()->user()->cart()->specifics);
+        return response(auth()->user()->cart->specifics()->with(['product'])->get());
     }
 
     /**
@@ -28,7 +28,7 @@ class CartController extends Controller
      */
     public function store(Request $request, Specific $specific)
     {
-        return response(auth()->user()->cart()->specifics()->attach($specific));
+        return response(auth()->user()->cart->specifics()->attach([$specific->id], ['quantity' => $request->get('quantity')]));
     }
 
     /**
@@ -67,6 +67,6 @@ class CartController extends Controller
 
     public function deleteSpecific(Specific $specific)
     {
-        return \response(auth()->user()->cart()->specifics()->detach($specific));
+        return \response(auth()->user()->cart->specifics()->detach([$specific->id]));
     }
 }

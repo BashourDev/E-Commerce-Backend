@@ -61,4 +61,19 @@ class SpecificController extends Controller
     {
         //
     }
+
+    public function searchFilters()
+    {
+        $colors = Specific::query()->distinct()->get(['colorText']);
+        $updatedColors = $colors->transform(function ($item, $key) {
+            $item['name'] = $item->colorText;
+            return $item; });
+
+        $sizes = Specific::query()->distinct()->get(['size']);
+        $updatedSizes = $sizes->transform(function ($item, $key) {
+            $item['name'] = $item->size;
+            return $item; });
+
+        return response(array(['id' => 1, 'name' => 'Color', 'options' => $updatedColors], ['id' => 2,'name' => 'Size', 'options' => $updatedSizes]));
+    }
 }

@@ -26,6 +26,8 @@ class User extends Authenticatable
         'isAdmin',
     ];
 
+    protected $withCount = ['orders'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
